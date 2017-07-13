@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -48,7 +46,6 @@
             android:layout_weight="1"
             android:scaleType="centerInside"
             android:background="@color/transparent"
-            android:src="@drawable/selector_item_view_type"
-            android:onClick="imgBtnChangeRecyclerType"/>
+            android:src="@drawable/selector_item_view_type" />
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

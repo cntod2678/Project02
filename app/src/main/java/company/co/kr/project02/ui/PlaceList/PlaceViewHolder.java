@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import company.co.kr.project02.R;
@@ -28,8 +30,11 @@ public class PlaceViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.imgBtn_chk)
     ImageButton imgBtn_chk;
 
+    @BindView(R.id.txtItem_content)
+    TextView txtItem_content;
+
     private Context mContext;
-    private PlaceListAdapter.PlaceAdapterOnClickHandler mClickHandler;
+    private PlaceListAdapter.PlaceAdapterOnClickListener mClickListener;
 
     public PlaceViewHolder(View view, Context mContext) {
         super(view);
@@ -38,13 +43,21 @@ public class PlaceViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, view);
     }
 
-    public void bind(final Item item, PlaceListAdapter.PlaceAdapterOnClickHandler handler) {
+    public void bind(final Item item, PlaceListAdapter.PlaceAdapterOnClickListener handler) {
         Log.i(TAG, "bind 호출 : " + item.getTitle());
-        this.mClickHandler = handler;
+        this.mClickListener = handler;
 
-        imgView_pic.setImageResource(item.getImgSrc());
+        Picasso
+                .with(mContext)
+                .load(item.getImgSrc())
+                .resize(1000,600)
+                .centerCrop()
+                .into(imgView_pic);
+
         txtItem_title.setText(item.getTitle());
+        txtItem_title.setSelected(true);
         imgBtn_chk.setSelected(item.isCheck());
+        txtItem_content.setText(item.getContent());
 
         imgBtn_chk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +66,7 @@ public class PlaceViewHolder extends RecyclerView.ViewHolder {
                 item.setCheck(!item.isCheck());
                 Log.d(TAG, item.toString());
 
-                mClickHandler.onClick("체크 클릭");
+                mClickListener.onClick("체크 클릭");
             }
         });
 

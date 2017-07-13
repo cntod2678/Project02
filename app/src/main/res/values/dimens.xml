@@ -8,5 +8,10 @@
 
     <dimen name="tool_height">40dp</dimen>
 
+    <dimen name="cardView_radius">8dp</dimen>
+    <dimen name="cardView_margin">5dp</dimen>
+    <dimen name="cardView_imgView_side">-8dp</dimen>
+    <dimen name="cardView_padding">16dp</dimen>
+    <dimen name="check_imgBtn_size">32dp</dimen>
 
 </resources>
