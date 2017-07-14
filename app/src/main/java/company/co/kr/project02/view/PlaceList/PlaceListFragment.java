@@ -1,4 +1,4 @@
-package company.co.kr.project02.ui.PlaceList;
+package company.co.kr.project02.view.PlaceList;
 
 /**
  * Created by Dongjin on 2017. 7. 12..
@@ -7,16 +7,16 @@ package company.co.kr.project02.ui.PlaceList;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v7.widget.Toolbar;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -34,10 +34,10 @@ import company.co.kr.project02.model.Item;
 public class PlaceListFragment extends Fragment {
     private static final String TAG = "PLACE_LIST_FRAGMENT";
 
-    private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),
+    private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
             LinearLayoutManager.VERTICAL, false);
     private StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
-    private PlaceListAdapter placeListAdapter;
+    private PlaceListAdapter placeListAdapter = null;
 
     private static final int LINEAR_TYPE = 0;
     private static final int STAGGERED_TYPE = 1;
@@ -65,6 +65,7 @@ public class PlaceListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         itemList = makePlaceListItems();
+        compareByDistance(itemList);
     }
 
     @Nullable
@@ -112,46 +113,15 @@ public class PlaceListFragment extends Fragment {
                 switch(position) {
                     case 0:
                         Log.d(TAG, "tab01");
-                        Collections.sort(itemList, new Comparator<Item>() {
-                            @Override
-                            public int compare(Item item1, Item item2) {
-                                if(item1.getDistance() > item2.getDistance()) {
-                                    return 1;
-                                } else if(item1.getDistance() < item2.getDistance()) {
-                                    return -1;
-                                }
-                                return 0;
-                            }
-                         });
+                        compareByDistance(itemList);
                         break;
                     case 1:
                         Log.d(TAG, "tab02");
-                        Collections.sort(itemList, new Comparator<Item>() {
-                            @Override
-                            public int compare(Item item1, Item item2) {
-                                if(item1.getLike() < item2.getLike()) {
-                                    return 1;
-                                } else if(item1.getLike() > item2.getLike()) {
-                                    return -1;
-                                }
-                                return 0;
-                            }
-                        });
+                        compareByLike(itemList);
                         break;
                     case 2:
                         Log.d(TAG, "tab03");
-                        Collections.sort(itemList, new Comparator<Item>() {
-                            @Override
-                            public int compare(Item item1, Item item2) {
-                                if(item1.getDate() < item2.getDate()) {
-                                    return 1;
-                                } else if(item1.getDate() > item2.getDate()) {
-                                    return -1;
-                                }
-                                return 0;
-                            }
-                        });
-                        Collections.reverse(itemList);
+                        compareByDate(itemList);
                         break;
                 }
                 placeListAdapter.notifyDataSetChanged();
@@ -195,6 +165,10 @@ public class PlaceListFragment extends Fragment {
         });
     }
 
+    /*
+    * Sort method
+    * */
+
     private int getRecyclerItemType(int type) {
         if(type == 0)
             return LINEAR_TYPE;
@@ -203,18 +177,61 @@ public class PlaceListFragment extends Fragment {
         return LINEAR_TYPE;
     }
 
+
+    private void compareByDistance(List<Item> items) {
+        Collections.sort(items, new Comparator<Item>() {
+            @Override
+            public int compare(Item item1, Item item2) {
+                if(item1.getDistance() > item2.getDistance()) {
+                    return 1;
+                } else if(item1.getDistance() < item2.getDistance()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+
+    private void compareByLike(List<Item> items) {
+        Collections.sort(items, new Comparator<Item>() {
+            @Override
+            public int compare(Item item1, Item item2) {
+                if(item1.getLike() < item2.getLike()) {
+                    return 1;
+                } else if(item1.getLike() > item2.getLike()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+
+    private void compareByDate(List<Item> items) {
+        Collections.sort(items, new Comparator<Item>() {
+            @Override
+            public int compare(Item item1, Item item2) {
+                if(item1.getDate() < item2.getDate()) {
+                    return 1;
+                } else if(item1.getDate() > item2.getDate()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+    }
+
     /*
     * Make item list
     * */
     private List<Item> makePlaceListItems() {
 
         itemList.add(new Item(R.drawable.rabbit, "토끼정", "크림카레 우동이 맛있고 데이트 장소로 알맞은 곳입니다.",
-                false, 2, 100, 75));
+                false, 3, 100, 75));
         itemList.add(new Item(R.drawable.food1, "육회육회", "육회는 진리", false, 4, 1, 26));
         itemList.add(new Item(R.drawable.samgyup, "동네 삼겹살", "육즙이 넘치는 삼겹살 맛집입니다. 전복과 함께 환상적인 조화를 맛보세요. " +
                 "안산에 위치해 있습니다.", false, 5, 33, 77));
         itemList.add(new Item(R.drawable.food2, "족발족발", "족발도 좋지", false, 6, 34, 2));
-        itemList.add(new Item(R.drawable.food3, "서대회집서대회서대회서대회서대회", "여수 서대회 맛있음", false, 1, 45, 8));
+        itemList.add(new Item(R.drawable.food3, "서대회집서대회서대회서대회서대회", "여수 서대회 맛있음", false, 2, 45, 8));
         itemList.add(new Item(R.drawable.food4, "고요남", "고인돌 고기", false, 30, 56, 6));
         itemList.add(new Item(R.drawable.food5, "냉면집", "이렇게 더운 여름엔 시원한 물냉면이 최고. 100% 고기육수만 사용하고 ", false, 7, 600, 10));
         itemList.add(new Item(R.drawable.shrimp, "새우집", "꼬리에 좋은 성분이 가득한 새우! 꼬리는 제거하고 살만 쏙 빼드시나요? 이제는 새우 꼬리까지 드세요. " +

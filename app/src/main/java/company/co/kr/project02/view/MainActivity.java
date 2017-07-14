@@ -1,9 +1,9 @@
-package company.co.kr.project02.ui;
+package company.co.kr.project02.view;
 
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import company.co.kr.project02.R;
-import company.co.kr.project02.ui.PlaceList.PlaceListFragment;
+import company.co.kr.project02.view.PlaceList.PlaceListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

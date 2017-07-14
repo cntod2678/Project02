@@ -1,4 +1,4 @@
-package company.co.kr.project02.ui.PlaceList;
+package company.co.kr.project02.view.PlaceList;
 
 /**
  * Created by Dongjin on 2017. 7. 12..
